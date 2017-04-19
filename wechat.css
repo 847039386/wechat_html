@@ -1,0 +1,24 @@
+.wechat_add_nav { color: #c9302c; margin-bottom: 20px; cursor:pointer;}
+
+.wechat_reset{ width: 980px; margin: 50px auto; }
+.wechat_bg { padding: 10px; background-color: #f5f5f5; border: 1px solid #ccc; overflow: hidden;}
+
+.key_item{ margin-bottom: 10px; overflow: hidden; }
+.c_red{ color: red; }
+.c_green{ color: green; }
+.c_qb{ color: #269abc; }
+.border_rl{ border-left: 1px solid #ccc; border-right: 1px solid #ccc;}
+.wechat_parent_2{ margin-left: 30px; }
+.wechat_parent_1_nav{ width: 1000px; padding: 10px; background-color: #f5f5f5; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; margin-bottom: 5px; }
+.w_100{ width: 100%; }
+.w_70{ width: 70%; }
+.w_50{ width: 50%; }
+.w_40{ width: 40%; }
+.w_30{ width: 30%; }
+.w_20{ width: 20%; }
+.w_10{ width: 10%; }
+.l_1{ margin-left: 1%; }
+.p1_left{ float: left; text-align: center;   }
+.p1_right{ float: right; text-align: center; }
+.wechat_body{ margin-top: 5px;}
+
