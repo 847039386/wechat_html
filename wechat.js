@@ -167,64 +167,57 @@ wechatCM.prototype = {
         }
         wechat_body.appendChild(element_wc)
     },
-    create_wechat_key : function(select,obj){
-        var obj_f = {};
-        if(obj == null || obj == undefined){
-            if(!select){
-                obj_f.key_activity = ""
-                obj_f.key_name = ""
-            }else{
-                obj_f.user_follow = ""
-                obj_f.user_activity = ""
-            }
-        }else{
-            obj_f = obj;
-        }
+    create_wechat_key : function(setup,obj){
         var _this = this;
         // key活动DOM的盒子
         var key_item = this.emptyBox("key_item")
         //组合关键字盒子
         var key_name_box ;
-        if(!select){
-            key_name_box = this.create_dom("input","p1_left w_30 input-group",{ title : "关键字" , name : "key_name" , text : obj_f.key_name })
-        }else{
-            key_name_box  = this.create_dom("select","p1_left w_30 l_1 input-group",{
-                name : "user_follow" ,
-                selected : obj_f.user_follow,
-                title : "发送内容" ,
-                activitys : [{ title:"关注" ,value: true }]
-            })
+        switch (setup.type){
+            case 1 :
+                key_name_box = this.create_dom("input","p1_left w_30 input-group",{ title : setup.title , name : setup.name , text : obj[setup.name] });
+                break;
+            case 2 :
+                var selected = obj ? obj[setup.name] : "";
+                key_name_box  = this.create_dom("select","p1_left w_30 l_1 input-group",{
+                    name : setup.name ,
+                    selected : selected,
+                    title : "发送内容" ,
+                    activitys : [{ title:"关注" ,value: "true" }]
+                })
+                break;
+            case 3 :
+            default :
+                var text = obj ? obj.key_name : "";
+                key_name_box = this.create_dom("input","p1_left w_30 input-group",{ title : "关键字" , name : "key_name" , text : text });
+                break;
         }
-        //组合发送内容盒子。
         var key_activity_box = this.create_dom("select","p1_left w_30 l_1 input-group",{
             name : "key_activity" ,
-            selected : obj_f.key_activity,
+            selected : obj ? obj.key_activity : "" ,
             title : "发送内容" ,
             activitys : [{ title:"文字" ,value:"text" }, { title:"图片" ,value:"image" }, { title:"文章" ,value:"article"  }]
         })
-        //组装按钮盒子。
+
         var key_button_box = this.create_dom("button","p1_left w_30 l_1 c_qb",{
             buttons : [
                 { title : "确定", cla2s : "btn btn-success btn-sm w_30" ,func : function(){ _this.click_wechat_key(key_item); }},
                 { title : "删除", cla2s : "btn btn-success btn-sm w_30" ,func : function(){ $(key_item).remove(); }}
             ]
         })
-        //组装活动内容盒子。
         var key_body_box = this.emptyBox("key_body_box w_100 p1_left")
-        //组装所有盒子。
-        this.append(key_item,[key_name_box,key_activity_box,key_button_box,key_body_box])
-        if(!select){
-            $("#build_key").append(key_item)
+        this.append(key_item,[key_name_box,key_activity_box,key_button_box,key_body_box]);
+        if($("#" + setup.mainDom).find(".key_item").length < (setup.mainDomNumber ? setup.mainDomNumber : 999)){
+            $("#" + setup.mainDom).append(key_item)
         }else{
-            if($("#build_user").find(".key_item").length < 1){
-                $("#build_user").append(key_item)
-            }else{
-                alert("注意关注类别只能有两个，并且选项不能重复，否则将覆盖为第一个。")
-            }
-
+            alert("注意关注类别只能有" + setup.mainDomNumber ? setup.mainDomNumber : 999 + "个。")
         }
+
         return key_item;
     },
+
+
+
 
     create_wechat_nav : function(obj){
         var obj_f = {};
@@ -357,42 +350,52 @@ wechatCM.prototype = {
         menu.button = box_arr;
         return menu;
     },
-    build_keys : function(select){
+    build_keys : function(setup){
         var key_activity_obj = {
             text : function(ele){
                 var key_name = $(ele).find("[name='key_name']").val();
                 var value = $(ele).find("[name='key_text']").val();
-                if(!select){
-                    return {
-                        type : 'text',
-                        key : key_name,
-                        value : value
-                    }
-                }else{
-                    var user_follow = $(ele).find("[name='user_follow']").val();
-                    return {
-                        type : 'text',
-                        follow : user_follow,
-                        value : value
-                    }
+                switch (setup.type) {
+                    case 2 :
+                        var user_follow = $(ele).find("[name='"+ setup.selectName +"']").val();
+                        return {
+                            type : 'text',
+                            follow : user_follow,
+                            value : value
+                        }
+                        break;
+                    case 1 :
+                    case 3 :
+                    default :
+                        return {
+                            type : 'text',
+                            key : key_name,
+                            value : value
+                        }
+                        break;
                 }
             },
             image : function(ele){
                 var mediaId = $(ele).find("[name='mediaId']").val();
                 var key_name = $(ele).find("[name='key_name']").val();
-                if(!select){
-                    return {
-                        type : 'image',
-                        key : key_name,
-                        mediaId : mediaId
-                    }
-                }else{
-                    var user_follow = $(ele).find("[name='user_follow']").val();
-                    return {
-                        type : 'image',
-                        follow : user_follow,
-                        mediaId : mediaId
-                    }
+                switch (setup.type) {
+                    case 2 :
+                        var user_follow = $(ele).find("[name='"+ setup.selectName +"']").val();
+                        return {
+                            type : 'image',
+                            follow : user_follow,
+                            mediaId : mediaId
+                        }
+                        break;
+                    case 1 :
+                    case 3 :
+                    default :
+                        return {
+                            type : 'image',
+                            key : key_name,
+                            mediaId : mediaId
+                        }
+                        break;
                 }
             },
             article : function(ele){
@@ -401,29 +404,34 @@ wechatCM.prototype = {
                 var description = $(ele).find("[name='description']").val();
                 var picurl = $(ele).find("[name='picurl']").val();
                 var url = $(ele).find("[name='url']").val();
-                if(!select){
-                    return {
-                        type : 'article',
-                        key : key_name,
-                        body : [{
-                            title : title,
-                            description : description,
-                            picurl : picurl,
-                            url : url
-                        }]
-                    }
-                }else{
-                    var user_follow = $(ele).find("[name='user_follow']").val();
-                    return {
-                        type : 'article',
-                        follow : user_follow,
-                        body : [{
-                            title : title,
-                            description : description,
-                            picurl : picurl,
-                            url : url
-                        }]
-                    }
+                switch (setup.type) {
+                    case 2 :
+                        var user_follow = $(ele).find("[name='"+ setup.selectName +"']").val();
+                        return {
+                            type : 'article',
+                            follow : user_follow,
+                            body : [{
+                                title : title,
+                                description : description,
+                                picurl : picurl,
+                                url : url
+                            }]
+                        }
+                        break;
+                    case 1 :
+                    case 3 :
+                    default :
+                        return {
+                            type : 'article',
+                            key : key_name,
+                            body : [{
+                                title : title,
+                                description : description,
+                                picurl : picurl,
+                                url : url
+                            }]
+                        }
+                        break;
                 }
             },
             go : function(ele){
@@ -449,7 +457,10 @@ wechatCM.prototype = {
         }
         var keys = [];
         var key_bkl = true;
-        var select_ed = select ? "#build_user .key_item" : "#build_key .key_item"
+
+
+
+        var select_ed =  "#" +  setup.mainDom + " .key_item" ;
         $(select_ed).each(function(idx,ele){
             var key_val;
             var key_bol = $(ele).find(".key_body_box ").html();
@@ -461,7 +472,7 @@ wechatCM.prototype = {
             if(key_bkl){
                 keys.push(key_val);
             }
-      })
+        })
         return keys;
     },
     build_json : function(){
@@ -473,21 +484,57 @@ wechatCM.prototype = {
             }
         })
         obj.menu = { button : c_menu}
-        obj.keys = this.build_keys();
-        obj.user = this.build_keys(true);
+        obj.keys = this.build_keys({ type : 3 , mainDom : "build_key"});
+        obj.user = this.build_keys({  type : 2 ,selectName :"user_follow" ,mainDom : "build_user"});
+        obj.userKey = this.build_keys({ type : 3 , mainDom : "build_userKey"});
+        obj.not = this.build_keys({ type : 3 , mainDom : "build_not"});
+
         return obj;
+    },
+    build_objJSON: function(json,domArray){
+        var _this = this;
+        domArray.forEach(function(setup){
+            json[setup.key].forEach(function(data){
+                if(setup.type == 2 ){
+                    var key_item = _this.create_wechat_key(
+                        { type : 2 ,mainDom : setup.mainDom , name : "user_follow" ,selected :"user_follow"},
+                        { key_activity : data.type ,user_follow : data.follow })
+                    switch (data.type){
+                        case "text" :
+                        case "image":
+                            _this.click_wechat_key(key_item,data)
+                            break;
+                        case "article":
+                            _this.click_wechat_key(key_item,data.body[0]);
+                            break;
+                    }
+                }else{
+                    var key_item = _this.create_wechat_key({ mainDom : setup.mainDom },{ key_activity : data.type ,key_name : data.key })
+                    switch (data.type){
+                        case "text" :
+                        case "image":
+                            _this.click_wechat_key(key_item,data)
+                            break;
+                        case "article":
+                            _this.click_wechat_key(key_item,data.body[0]);
+                            break;
+                    }
+                }
+            })
+        })
     },
     build : function(){
         $("#wechat_reset").html("")
         $("#build_key").html("")
         $("#build_user").html("")
+        $("#build_userKey").html("")
+        $("#build_not").html("")
         var json ;
         var _this = this;
         $.ajax({
             type: "get",
             url: "http://data.fitvdna.com/wechat/menu-update",
             success: function(data){
-                console.log(data)
                 json = JSON.parse(data);
                 //解析菜单
                 json.menu.button.forEach(function(obj){
@@ -507,35 +554,13 @@ wechatCM.prototype = {
                         $("#wechat_reset").append(par)
                     }
                 })
-                //解析关键字
-                json.keys.forEach(function(obj){
-                    //console.log(obj)
-                    var key_item = _this.create_wechat_key(false,{ key_activity : obj.type ,key_name : obj.key })
-                    switch (obj.type){
-                        case "text" :
-                        case "image":
-                            _this.click_wechat_key(key_item,obj)
-                            break;
-                        case "article":
-                            _this.click_wechat_key(key_item,obj.body[0]);
-                            break;
-                    }
-                })
-                //解析关注
-                json.user.forEach(function(obj){
-                    //console.log(obj)
-                    console.log(obj)
-                    var key_item = _this.create_wechat_key(true,{ key_activity : obj.type ,user_follow : obj.follow })
-                    switch (obj.type){
-                        case "text" :
-                        case "image":
-                            _this.click_wechat_key(key_item,obj)
-                            break;
-                        case "article":
-                            _this.click_wechat_key(key_item,obj.body[0]);
-                            break;
-                    }
-                })
+                //解析json表里的除菜单栏所有的关键字。
+                _this.build_objJSON(json,[
+                    { type : 3 , key : "keys" , mainDom : "build_key" },
+                    { type : 2 , key : "user" , mainDom : "build_user" },
+                    { type : 3 , key : "userKey" , mainDom : "build_userKey" },
+                    { type : 3 , key : "not" , mainDom : "build_not" }
+                ])
             },
             error:function(){
                 console.log(data)

@@ -13,16 +13,24 @@
     <div class="wechat_reset" >
         <div class="row">
             <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="wcm.create_parent_html(null)" >添加父级菜单</button></div>
-            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="wcm.create_wechat_key(false)" >添加关键字</button></div>
-            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="wcm.create_wechat_key(true)" >关注</button></div>
-            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="console.log(JSON.stringify(wcm.build_json()))" >生成</button></div>
+            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="wcm.create_wechat_key({type :3 ,mainDom :'build_key'})" >添加关键字</button></div>
+            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="wcm.create_wechat_key({type :3 ,mainDom :'build_userKey'})" >添加用户回复（#）</button></div>
+            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="wcm.create_wechat_key({type :2 ,mainDom :'build_user' ,mainDomNumber : 1 , name : 'user_follow' ,selected :'user_follow'})" >添加关注</button></div>
+            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="wcm.create_wechat_key({type :3 ,mainDom :'build_not' ,mainDomNumber : 1})" >用户找不到数据时。</button></div>
+            <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="console.log(wcm.build_json());console.log(JSON.stringify(wcm.build_json()))" >测试生成</button></div>
             <div class="col-md-2"><button type="button" class="btn btn-success btn-sm" onclick="wcm.build()" >解析远程数据</button></div>
             <div class="col-md-2"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">提交数据</button></div>
         </div><br><br>
         <div id="wechat_reset"></div><br><br>
         <!--key值-->
+        <h1>微信内设关键字</h1>
         <div class="wechat_bg wechat_parent_1" id="build_key"></div><br>
+        <h1>用户关注</h1>
         <div class="wechat_bg wechat_parent_1" id="build_user"></div>
+        <h1>用户回复关键字</h1>
+        <div class="wechat_bg wechat_parent_1" id="build_userKey"></div>
+        <h1>找不到数据时</h1>
+        <div class="wechat_bg wechat_parent_1" id="build_not"></div>
     </div>
 
 
