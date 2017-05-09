@@ -24,8 +24,8 @@
       <file leaf-file-name="wechat.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/wechat.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5271676">
-              <caret line="138" column="117" selection-start-line="138" selection-start-column="117" selection-end-line="138" selection-end-column="117" />
+            <state vertical-scroll-proportion="0.2531792">
+              <caret line="539" column="71" selection-start-line="539" selection-start-column="71" selection-end-line="539" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -65,8 +65,8 @@
       <list>
         <option value="$PROJECT_DIR$/wechat.css" />
         <option value="$PROJECT_DIR$/test.js" />
-        <option value="$PROJECT_DIR$/wechat.js" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/wechat.js" />
       </list>
     </option>
   </component>
@@ -203,7 +203,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24446785" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -568,8 +568,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wechat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5271676">
-          <caret line="138" column="117" selection-start-line="138" selection-start-column="117" selection-end-line="138" selection-end-column="117" />
+        <state vertical-scroll-proportion="0.2531792">
+          <caret line="539" column="71" selection-start-line="539" selection-start-column="71" selection-end-line="539" selection-end-column="71" />
           <folding />
         </state>
       </provider>

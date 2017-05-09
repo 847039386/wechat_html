@@ -537,7 +537,7 @@ wechatCM.prototype = {
                             _this.click_wechat_key(key_item,data)
                             break;
                         case "article":
-                            _this.click_wechat_key(key_item,data.body[0]);
+                            _this.click_wechat_key(key_item,data.body);
                             break;
                     }
                 }else{
