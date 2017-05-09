@@ -91,6 +91,7 @@ wechatCM.prototype = {
     },
     click_wechat_key : function(ele,info){
         var infog = {};
+        var _this = this;
         if(info == null || info == undefined){
             infog.value = "";
             infog.key_name = "";
@@ -103,6 +104,7 @@ wechatCM.prototype = {
             infog = info;
         }
         var state = {
+
             text : function(){
                 var ele = document.createElement("textarea");
                 ele.className = "w_100 form-control";
@@ -115,13 +117,44 @@ wechatCM.prototype = {
                 return this.bootstrap_group1("素材ID","图片的素材ID，源于微信。","mediaId",infog.mediaId)
             },
             article : function(){
-                var article_all = document.createDocumentFragment() ;
-                var _this = this;
-                article_all.appendChild(_this.bootstrap_group1("标题&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;","文章标题","title",infog.title))
-                article_all.appendChild(_this.bootstrap_group1("文章简介&nbsp;&nbsp;&nbsp;","文章的内容简介。","description",infog.description))
-                article_all.appendChild(_this.bootstrap_group1("缩略图地址","图片的缩略图地址。","picurl",infog.picurl))
-                article_all.appendChild(_this.bootstrap_group1("文章地址&nbsp;&nbsp;&nbsp;","文章的地址","url",infog.url))
+                console.log("进来了")
+                var __this = this;
+                if(infog instanceof Array){
+                    var all = document.createDocumentFragment();
+                    infog.forEach(function(inf){
+                        all.appendChild(__this.createArticle(inf))
+                    })
+                    return all;
+                }else{
+                    return __this.createArticle(infog);
+                }
+            },
+            createArticle : function(inf){
+                var __this = this;
+                var article_all = document.createElement("div") ;
+                article_all.className = "article_item"
+                article_all.appendChild(this.bootstrap_group1("标题&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;","文章标题","title",inf ? inf.title : ""))
+                article_all.appendChild(this.bootstrap_group1("文章简介&nbsp;&nbsp;&nbsp;","文章的内容简介。","description",inf ? inf.description : ""))
+                article_all.appendChild(this.bootstrap_group1("缩略图地址","图片的缩略图地址。","picurl",inf ? inf.picurl : ""))
+                article_all.appendChild(this.bootstrap_group1("文章地址&nbsp;&nbsp;&nbsp;","文章的地址","url",inf ? inf.url : ""))
+                var key_button_box = _this.create_dom("button","w_30 l_1 c_qb",{
+                    buttons : [
+                        { title : "添加", cla2s : "btn btn-success btn-sm w_30" ,func : function(){ __this.createChildArticle(ele); }},
+                        { title : "删除", cla2s : "btn btn-success btn-sm w_30" ,func : function(){ $(article_all).remove(); }}
+                    ]
+                })
+                article_all.appendChild(key_button_box);
                 return article_all;
+            },
+            createChildArticle : function(ele){
+                var __this = this;
+                var parent = $(ele).find(".key_body_box");
+                if(parent.find(".article_item").length < 5 ){
+                    parent.append(__this.createArticle());
+                }else{
+                    alert("一个关键词最多只能发五篇文章。")
+                }
+
             },
             bootstrap_group1 : function(title,placeholder,name,value){
                 var ele_p = document.createElement("div");
@@ -400,22 +433,26 @@ wechatCM.prototype = {
             },
             article : function(ele){
                 var key_name = $(ele).find("[name='key_name']").val();
-                var title = $(ele).find("[name='title']").val();
-                var description = $(ele).find("[name='description']").val();
-                var picurl = $(ele).find("[name='picurl']").val();
-                var url = $(ele).find("[name='url']").val();
+                var bodys = [];
+                $(ele).find(".article_item").each(function(idx,item){
+                    var title = $(item).find("[name='title']").val();
+                    var description = $(item).find("[name='description']").val();
+                    var picurl = $(item).find("[name='picurl']").val();
+                    var url = $(item).find("[name='url']").val();
+                    bodys.push({
+                        title : title,
+                        description : description,
+                        picurl : picurl,
+                        url : url
+                    })
+                })
                 switch (setup.type) {
                     case 2 :
                         var user_follow = $(ele).find("[name='"+ setup.selectName +"']").val();
                         return {
                             type : 'article',
                             follow : user_follow,
-                            body : [{
-                                title : title,
-                                description : description,
-                                picurl : picurl,
-                                url : url
-                            }]
+                            body : bodys
                         }
                         break;
                     case 1 :
@@ -424,12 +461,7 @@ wechatCM.prototype = {
                         return {
                             type : 'article',
                             key : key_name,
-                            body : [{
-                                title : title,
-                                description : description,
-                                picurl : picurl,
-                                url : url
-                            }]
+                            body : bodys
                         }
                         break;
                 }
@@ -516,7 +548,7 @@ wechatCM.prototype = {
                             _this.click_wechat_key(key_item,data)
                             break;
                         case "article":
-                            _this.click_wechat_key(key_item,data.body[0]);
+                            _this.click_wechat_key(key_item,data.body);
                             break;
                     }
                 }
